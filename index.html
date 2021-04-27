@@ -1,1 +1,224 @@
-<h1>A nagy érettségi visszaszámláló</h1>
+
+<!--
+Egy visszaszámláló, ami mutatja a 2021 májusi érettségi időszakig hátralévő időt, vagy ha már elkezdődött, akkor azt, hogy mennyi ideje tart. Ezenkívül van egy link az érettségi időpontokról.
+Készítette: Reményi Márton, 2021
+(Kompaktság miatt van minden egy html fájlba sűrítve)
+-->
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<title>A nagy érettségi visszaszámláló</title>
+	
+	<meta charset="UTF-8" name="description" content="Egy oldal, ami mutatja a 2021. májusi érettségi időszakig hátralévő időt, vagy azt, hogy mennyi ideje tart.">
+
+</head>
+
+<body style="background-color: ">
+
+	<style type="text/css">
+
+		body
+		{
+			background-color: rgb(100, 205, 105);
+			animation: colourfulB 30s linear infinite;
+		}
+
+		@keyframes colourfulB
+		{
+			0%
+			{background-color: rgb(122, 255, 0);}
+			8.3%
+			{background-color: rgb(0, 255, 0);}
+			16.6%
+			{background-color: rgb(0, 255, 122);}
+			25%
+			{background-color: rgb(0, 255, 255);}
+			33.3%
+			{background-color: rgb(0, 122, 255);}
+			41.6%
+			{background-color: rgb(0, 0, 255);}
+			50%
+			{background-color: rgb(122, 0, 255);}
+			58.3%
+			{background-color: rgb(255, 0, 255);}
+			66.6%
+			{background-color: rgb(255, 0, 122);} 
+			75%
+			{background-color: rgb(255, 0, 0);}
+			83.3%
+			{background-color: rgb(255, 122, 0);}
+			91.6%
+			{background-color: rgb(255, 255, 0);}
+			100%
+			{background-color: rgb(122, 255, 0);}
+		}
+
+		@keyframes colourfulT
+		{
+			0%
+			{color: rgb(255, 255, 255);}
+			8.3%
+			{color: rgb(255, 255, 255);}
+			16.6%
+			{color: rgb(255, 255, 255);}
+			25%
+			{color: rgb(255, 255, 255);}
+			33.3%
+			{color: rgb(255, 255, 255);}
+			41.6%
+			{color: rgb(255, 255, 255);}
+			50%
+			{color: rgb(255, 255, 255);}
+			58.3%
+			{color: rgb(255, 255, 255);}
+			66.6%
+			{color: rgb(255, 255, 255);} 
+			75%
+			{color: rgb(255, 255, 255);}
+			83.3%
+			{color: rgb(255, 255, 255);}
+			91.6%
+			{color: rgb(0, 0, 0);}
+			100%
+			{color: rgb(255, 255, 255);}
+		}		
+
+		h1, p, a
+		{
+			color: rgb(255, 255, 255);
+			font-family: Arial;
+			animation: colourfulT 30s linear infinite;
+		}
+
+		h1
+		{
+			margin-top: 70px;
+			margin-bottom: -50px;
+			font-size: 90px;
+		}
+
+		#main
+		{
+			text-align: center;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			top: 0;
+			left: 0;
+		}
+
+		#date
+		{
+			font-size: 50px;
+			font-style: italic;
+		}
+
+		#timer
+		{
+			margin-top: 120px;
+			font-size: 70px;
+		}
+
+		#additional
+		{
+			font-size: 75px;
+			margin-bottom: -70px
+		}
+
+		#info
+		{
+			font-size: 40px;
+			margin-top: 120px;
+			font-style: italic;
+		}
+
+		#footer
+		{
+			font-size: 15px;
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+		}
+
+	</style>
+
+
+	<div id="main">
+
+		<h1 id = "title">A nagy érettségi visszaszámláló</h1>
+		<p id="date">2021. május-június</p>
+		<p id= "timer">0 nap 0 óra 0 perc 0 másodperc 0 stb.</p>
+		<p id = "additional"></p>
+		<p id = "info">Érettségi időpontok: <a href="https://www.oktatas.hu/kozneveles/erettsegi/2021tavaszi_vizsgaidoszak/2021tavasz_vizsgaidopontok">link</a></p>
+
+	</div>
+
+	<script type="text/javascript">
+
+		// az érettségi időszak kezdésének dátuma
+		var date = Date.parse("03 May 2021 09:00:00 GMT+2");
+
+		function updateTime()
+		{
+			var dateNow = new Date();
+			var now = dateNow.getTime();
+			var diff = date-now;
+
+			// Amikor elkezdődött az érettségi
+			if (diff <= 0)
+			{
+				// biztatás kiírása
+				document.getElementById("additional").innerHTML = "Az érettségi elkezdődött, sok sikert! :D";
+
+				// oldal címánek frissítése
+				document.getElementById("title").innerHTML = "A nagy érettségi \"előreszámláló\""
+				
+				diff = now-date;
+			}
+			// amikor már csak kevesebb, mint egy nap van hátra
+			else if (diff > 0 && diff < 86400000)
+			{
+				// figyelmeztetés, amikor már csak egy nap van hátra
+				document.getElementById("additional").innerHTML = "Már csak egy nap, hajrá! :D";
+			}
+
+			// az értékek kiszámítása
+			var days = Math.floor(diff / (1000*3600*24));
+			diff -= days*1000*3600*24;
+			var hours = Math.floor(diff / (1000*3600));
+			diff -= hours*1000*3600
+			var minutes = Math.floor(diff / (1000*60));
+			diff -= minutes*1000*60
+			var seconds = Math.floor(diff / 1000);
+			diff -= seconds*1000
+			var etc = diff.toString();
+
+			if (etc.length < 3)
+			{
+				var etc2 = "";
+				for (i = 0; i < 3 - etc.length; ++i)
+					etc2 += "0";
+				etc = etc2 + etc;
+			}
+			
+			// számláló frissítése
+			document.getElementById("timer").innerHTML = `${days} nap ${hours} óra ${minutes} perc ${seconds} másodperc ${etc} stb.`;
+			
+		}
+
+		// folyamatosan ismétlése az eljárásnak
+		setInterval(updateTime, 0);
+	</script>
+
+	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo">V. 1.0.</a>
+
+</body>
+
+</html>
+<!--
+	33363338333733343337333433373330333733333333363133323636333236363337333733373337333733373332363533373339333636363337333533373334333733353336333233363335333236353336333333363636333636343332363633373337333633313337333433363333333633383333363633373336333336343336363333363333333436323336333733353338333733303335333433363636333436363335333533343339
+-->
