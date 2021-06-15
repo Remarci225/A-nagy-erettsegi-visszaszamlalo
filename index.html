@@ -161,6 +161,8 @@ Készítette: Reményi Márton, 2021
 
 		// az érettségi időszak kezdésének dátuma
 		var date = Date.parse("03 May 2021 09:00:00 GMT+2");
+		var summerStart = Date.parse("14 June 2021 16:00:00 GMT+2"); 
+		var autumnStart = Date.parse("01 September 2021 00:00:00 GMT+2");
 
 		function updateTime()
 		{
@@ -171,13 +173,25 @@ Készítette: Reményi Márton, 2021
 			// Amikor elkezdődött az érettségi
 			if (diff <= 0)
 			{
-				// biztatás kiírása
-				document.getElementById("additional").innerHTML = "Az érettségi elkezdődött, sok sikert! :D";
+				if (dateNow < summerStart)
+				{
+					// biztatás kiírása
+					document.getElementById("additional").innerHTML = "Az érettségi elkezdődött, sok sikert! :D";
 
-				// oldal címánek frissítése
-				document.getElementById("title").innerHTML = "A nagy érettségi \"előreszámláló\""
-				
-				diff = now-date;
+					// oldal címánek frissítése
+					document.getElementById("title").innerHTML = "A nagy érettségi \"előreszámláló\"";
+					diff = now-date;
+				}
+
+				else
+				{
+					// biztatás kiírása
+					document.getElementById("additional").innerHTML = "A vakáció elkezdődött, sok sikert! :D";
+
+					// oldal címánek frissítése
+					document.getElementById("title").innerHTML = "A nagy vakáció \"előreszámláló\"";
+					diff = now-summerStart;
+				}
 			}
 			// amikor már csak kevesebb, mint egy nap van hátra
 			else if (diff > 0 && diff < 86400000)
@@ -214,7 +228,7 @@ Készítette: Reményi Márton, 2021
 		setInterval(updateTime, 0);
 	</script>
 
-	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo">V. 1.0.</a>
+	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo">V. 1.1.</a>
 
 </body>
 
