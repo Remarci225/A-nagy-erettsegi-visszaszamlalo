@@ -1,7 +1,11 @@
 
 <!--
-Egy visszaszámláló, ami mutatja a 2021 májusi érettségi időszakig hátralévő időt, vagy ha már elkezdődött, akkor azt, hogy mennyi ideje tart. Ezenkívül van egy link az érettségi időpontokról.
+Egy oldal, ami mutatja az aktuális érettségi időszakig hátralévő időt, vagy ha már elkezdődött, akkor azt, hogy 
+mennyi ideje tart (vagy az érettségi, vagy a nyáriszünet, ha már elkezdődött). Ezenkívül van egy link az érettségi 
+időpontokról.
+
 Készítette: Reményi Márton, 2021
+
 (Kompaktság miatt van minden egy html fájlba sűrítve)
 -->
 
@@ -11,13 +15,15 @@ Készítette: Reményi Márton, 2021
 
 <head>
 
-	<title>A nagy érettségi visszaszámláló</title>
+	<title id="pageTitle">A nagy érettségi visszaszámláló</title>
 	
-	<meta charset="UTF-8" name="description" content="Egy oldal, ami mutatja a 2021. májusi érettségi időszakig hátralévő időt, vagy azt, hogy mennyi ideje tart.">
+	<meta charset="UTF-8" name="description" content="Egy oldal, ami mutatja az aktuális érettségi időszakig 
+	hátralévő időt, vagy azt, hogy mennyi ideje tart (vagy az érettségi, vagy a nyáriszünet, ha már elkezdődött).
+	zenkívül van egy link az érettségi időpontokról">
 
 </head>
 
-<body style="background-color: ">
+<body>
 
 	<style type="text/css">
 
@@ -153,51 +159,112 @@ Készítette: Reményi Márton, 2021
 		<p id="date">2021. május-június</p>
 		<p id= "timer">0 nap 0 óra 0 perc 0 másodperc 0 stb.</p>
 		<p id = "additional"></p>
-		<p id = "info">Érettségi időpontok: <a href="https://www.oktatas.hu/kozneveles/erettsegi/2021tavaszi_vizsgaidoszak/2021tavasz_vizsgaidopontok">link</a></p>
+		<p id = "info">Érettségi időpontok: <a href="https://www.oktatas.hu/kozneveles/erettsegi/2022tavaszi_vizsgaidoszak/vizsgaidopontok_2022_tavasz" target="_blank">link</a></p>
 
 	</div>
 
 	<script type="text/javascript">
+		
+		// jelenlegi dátum és év
+		var currentDate = new Date();
+		var yearNow = currentDate.getFullYear();
+		
+		// az időszakok intervallumai
+		let nyariErettsegiIntervallum = [`02 May ${yearNow} 09:00:00 GMT+1`, `24 June ${yearNow} 18:00:00 GMT+1`];
+		let vakacioIntervallum = [`24 June ${yearNow} 18:00:00 GMT+1`, `01 September ${yearNow} 00:00:00 GMT+1`];
+		let oszIntervallum = [`01 September ${yearNow} 00:00:00 GMT+1`, `15 October ${yearNow} 08:00:00 GMT+1`];
+		let osziErettsegiIntervallum = [`14 October ${yearNow} 08:00:00 GMT+1`, `25 November ${yearNow} 18:00:00 GMT+1`];
+		let nyariErettsegiElottIntervallum = [`26 November ${yearNow} 18:00:00 GMT+1`, `02 May ${yearNow} 09:00:00 GMT+1`];
 
-		// az érettségi időszak kezdésének dátuma
-		var date = Date.parse("03 May 2021 09:00:00 GMT+2");
-		var summerStart = Date.parse("14 June 2021 16:00:00 GMT+2"); 
-		var autumnStart = Date.parse("01 September 2021 00:00:00 GMT+2");
+		let intervals = [nyariErettsegiIntervallum, vakacioIntervallum, oszIntervallum, osziErettsegiIntervallum, nyariErettsegiElottIntervallum];
+
+		function updateYears(previousYear, nextYear)
+		{
+			for (i = 0; i < intervals.length; ++i)
+			{	
+				intervals[i][0] =  intervals[i][0].replace(`${previousYear}`, `${nextYear}`);
+				intervals[i][1] = intervals[i][1].replace(`${nextYear}`, `${nextYear + 1}`);
+				intervals[i][1] = intervals[i][1].replace(`${previousYear}`, `${nextYear}`);
+			}
+		}		
 
 		function updateTime()
 		{
 			var dateNow = new Date();
+
+			var nyariErettsegiSzoveg = `${yearNow}. május-június`;
+			var osziErettsegiSzoveg = `${yearNow}. október-november`;
+
+			// következő intervallum megkeresése
+			var index = 0;
+			while (index < intervals.length && Date.parse(intervals[index][0]) <= Date.parse(dateNow))
+			{
+				++index;
+			}
+
+			if (index == intervals.length)
+			{
+				index = 0;
+				updateYears(yearNow, ++yearNow);
+			}
+
+			// az adott időszak kezdésének dátuma
+			var startDate = Date.parse(intervals[index][0]);
+			var endDate = Date.parse(intervals[index][1]);
+			
+			// jelenlegi időpont és különbség
 			var now = dateNow.getTime();
-			var diff = date-now;
+			var diff = startDate-now;
+			
+			// idő kiírás frissítése
+			if (index < 3)
+			{
+				document.getElementById("date").innerHTML = nyariErettsegiSzoveg;
+			}
+			else
+			{
+				document.getElementById("date").innerHTML = osziErettsegiSzoveg;
+			}
 
 			// Amikor elkezdődött az érettségi
-			if (diff <= 0)
+			if (index === 1 || index === 4)
 			{
-				if (dateNow < summerStart)
+				// biztatás kiírása
+				document.getElementById("additional").innerHTML = "Az érettségi elkezdődött, sok sikert! :D";
+
+				// oldal címének frissítése
+				document.getElementById("title").innerHTML = "A nagy érettségi \"előreszámláló\"";
+				diff = now-Date.parse(intervals[index-1][0]);
+			}
+
+			// amikor érettségi jön
+			else if (index === 0 || index === 3)
+			{
+				// oldal címének frissítése
+				document.getElementById("title").innerHTML = "A nagy érettségi visszaszámláló";
+
+				// amikor már csak kevesebb, mint egy nap van hátra
+				if (diff < 86400000)
 				{
-					// biztatás kiírása
-					document.getElementById("additional").innerHTML = "Az érettségi elkezdődött, sok sikert! :D";
-
-					// oldal címánek frissítése
-					document.getElementById("title").innerHTML = "A nagy érettségi \"előreszámláló\"";
-					diff = now-date;
+					// figyelmeztetés, amikor már csak egy nap van hátra
+					document.getElementById("additional").innerHTML = "Már csak egy nap, hajrá! :D";
 				}
-
 				else
 				{
-					// biztatás kiírása
-					document.getElementById("additional").innerHTML = "A vakáció elkezdődött, sok sikert! :D";
-
-					// oldal címánek frissítése
-					document.getElementById("title").innerHTML = "A nagy vakáció \"előreszámláló\"";
-					diff = now-summerStart;
+					// biztatás elrejtése
+					document.getElementById("additional").innerHTML = "";
 				}
 			}
-			// amikor már csak kevesebb, mint egy nap van hátra
-			else if (diff > 0 && diff < 86400000)
+
+			// amikor vakáció van
+			else if (index === 2)
 			{
-				// figyelmeztetés, amikor már csak egy nap van hátra
-				document.getElementById("additional").innerHTML = "Már csak egy nap, hajrá! :D";
+				// biztatás kiírása
+				document.getElementById("additional").innerHTML = "A vakáció elkezdődött, sok sikert! :D";
+				
+				// oldal címének frissítése
+				document.getElementById("title").innerHTML = "A nagy vakáció \"előreszámláló\"";
+				diff = now-Date.parse(intervals[index-1][0]);
 			}
 
 			// az értékek kiszámítása
@@ -228,7 +295,7 @@ Készítette: Reményi Márton, 2021
 		setInterval(updateTime, 0);
 	</script>
 
-	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo">V. 1.1.</a>
+	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo" target="_blank">V. 1.2.</a>
 
 </body>
 
