@@ -1,25 +1,28 @@
 
 <!--
 Egy oldal, ami mutatja az aktuális érettségi időszakig hátralévő időt, vagy ha már elkezdődött, akkor azt, hogy 
-mennyi ideje tart (vagy az érettségi, vagy a nyáriszünet, ha már elkezdődött). Ezenkívül van egy link az érettségi 
-időpontokról.
+mennyi ideje tart (vagy az érettségi, vagy a nyáriszünet, ha már elkezdődött). Ezenkívül van egy link az érettségivel 
+kapcsolatos információkhoz.
 
-Készítette: Reményi Márton, 2021
+Készítette: Reményi Márton, 2021-2023
 
 (Kompaktság miatt van minden egy html fájlba sűrítve)
 -->
 
 <!DOCTYPE html>
 
-<html>
+<html lang="hu">
 
 <head>
 
-	<title id="pageTitle">A nagy érettségi visszaszámláló</title>
-	
-	<meta charset="UTF-8" name="description" content="Egy oldal, ami mutatja az aktuális érettségi időszakig 
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="érettségi, visszaszámláló">
+	<meta name="description" content="Egy oldal, ami mutatja az aktuális érettségi időszakig 
 	hátralévő időt, vagy azt, hogy mennyi ideje tart (vagy az érettségi, vagy a nyáriszünet, ha már elkezdődött).
 	zenkívül van egy link az érettségi időpontokról">
+
+	<title id="pageTitle">A nagy érettségi visszaszámláló</title>
 
 </head>
 
@@ -159,7 +162,7 @@ Készítette: Reményi Márton, 2021
 		<p id="date">2021. május-június</p>
 		<p id= "timer">0 nap 0 óra 0 perc 0 másodperc 0 stb.</p>
 		<p id = "additional"></p>
-		<p id = "info">Érettségi időpontok: <a href="https://www.oktatas.hu/kozneveles/erettsegi/2022tavaszi_vizsgaidoszak/vizsgaidopontok_2022_tavasz" target="_blank">link</a></p>
+		<p id = "info">Érettségi információ: <a href="https://www.oktatas.hu/kozneveles/erettsegi/jelentkezes" target="_blank">link</a></p>
 
 	</div>
 
@@ -170,8 +173,8 @@ Készítette: Reményi Márton, 2021
 		var yearNow = currentDate.getFullYear();
 		
 		// az időszakok intervallumai
-		let nyariErettsegiIntervallum = [`02 May ${yearNow} 09:00:00 GMT+2`, `24 June ${yearNow} 18:00:00 GMT+2`];
-		let vakacioIntervallum = [`24 June ${yearNow} 18:00:00 GMT+2`, `01 September ${yearNow} 00:00:00 GMT+2`];
+		let nyariErettsegiIntervallum = [`05 May ${yearNow} 09:00:00 GMT+2`, `30 June ${yearNow} 18:00:00 GMT+2`];
+		let vakacioIntervallum = [`30 June ${yearNow} 18:00:00 GMT+2`, `01 September ${yearNow} 00:00:00 GMT+2`];
 		let oszIntervallum = [`01 September ${yearNow} 00:00:00 GMT+2`, `15 October ${yearNow} 08:00:00 GMT+2`];
 		let osziErettsegiIntervallum = [`14 October ${yearNow} 08:00:00 GMT+2`, `25 November ${yearNow} 18:00:00 GMT+2`];
 		let nyariErettsegiElottIntervallum = [`26 November ${yearNow} 18:00:00 GMT+2`, `02 May ${yearNow} 09:00:00 GMT+2`];
@@ -291,11 +294,11 @@ Készítette: Reményi Márton, 2021
 			
 		}
 
-		// folyamatosan ismétlése az eljárásnak
+		// folyamatos ismétlése az eljárásnak
 		setInterval(updateTime, 0);
 	</script>
 
-	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo" target="_blank">V. 1.3.</a>
+	<a id="footer" href="https://github.com/Remarci225/A-nagy-erettsegi-visszaszamlalo" target="_blank">V. 1.4.</a>
 
 </body>
 
